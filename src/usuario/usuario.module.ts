@@ -8,9 +8,9 @@ import { Bcrypt } from '../utils/bcrypt';
 
 @Module({
   imports: [
-  TypeOrmModule.forFeature([Usuario]),
-  forwardRef(() => AuthModule),
-], 
+    TypeOrmModule.forFeature([Usuario]),
+    forwardRef(() => AuthModule),
+  ],
   providers: [UsuarioService, Bcrypt],
   controllers: [UsuarioController],
   exports: [UsuarioService, Bcrypt],

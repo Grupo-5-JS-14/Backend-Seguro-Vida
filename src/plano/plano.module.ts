@@ -5,9 +5,9 @@ import { PlanoController } from "./controller/plano.controller";
 import { PlanoService } from "./service/plano.service";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Plano])],
-    providers: [PlanoService],
-    controllers: [PlanoController],
-    exports: [PlanoService]
+  imports: [TypeOrmModule.forFeature([Plano])],
+  providers: [PlanoService],
+  controllers: [PlanoController],
+  exports: [PlanoService]
 })
 export class PlanoModule {}

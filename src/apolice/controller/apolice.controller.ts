@@ -4,34 +4,47 @@ import { ApoliceService } from '../service/apolice.service';
 
 @Controller('apolices')
 export class ApoliceController {
+
   constructor(private readonly apoliceService: ApoliceService) {}
-  
-  @Get() 
-  @HttpCode(HttpStatus.OK)// pesquisar tudo
-  findAll(){ // pesquisar todas os produtos
+
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  findAll() {
     return this.apoliceService.findAll();
   }
-  @Get('/:id') // pesquisar por id
+
+  @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number){ 
+  findById(@Param('id', ParseIntPipe) id: number) {
     return this.apoliceService.findById(id);
   }
 
-  @Post()// criar cadastro
-  @HttpCode(HttpStatus.OK)
-  create(@Body() apolice: Apolice): Promise<Apolice>{  
-    return this.apoliceService.create(apolice);
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  async create(@Body() apolice: Apolice) {
+    const data = await this.apoliceService.create(apolice);
+    return {
+      message: 'Apólice criada com sucesso!',
+      data
+    };
   }
 
-  @Put() // atualizar cadastro
+  @Put()
   @HttpCode(HttpStatus.OK)
-  update(@Body() apolice: Apolice): Promise<Apolice>{
-    return this.apoliceService.update(apolice);
+  async update(@Body() apolice: Apolice) {
+    const data = await this.apoliceService.update(apolice);
+    return {
+      message: 'Apólice atualizada com sucesso!',
+      data
+    };
   }
 
-  @Delete('/:id') // deletar
+  @Delete('/:id')
   @HttpCode(HttpStatus.OK)
-  delete(@Param('id', ParseIntPipe) id: number){
-    return this.apoliceService.delete(id);
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    await this.apoliceService.delete(id);
+    return {
+      message: 'Apólice deletada com sucesso!'
+    };
   }
 }

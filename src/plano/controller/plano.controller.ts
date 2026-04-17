@@ -2,44 +2,55 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPip
 import { Plano } from "../entities/plano.entity";
 import { PlanoService } from "../service/plano.service";
 
-@Controller("/plano")
+@Controller("/planos")
 export class PlanoController {
-  constructor(private readonly planoService: PlanoService) { }
+
+  constructor(private readonly planoService: PlanoService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(): Promise<Plano[]> {
+  findAll() {
     return this.planoService.findAll();
   }
 
   @Get('/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number): Promise<Plano> {
+  findById(@Param('id', ParseIntPipe) id: number) {
     return this.planoService.findById(id);
   }
 
   @Get('/nome/:nome')
   @HttpCode(HttpStatus.OK)
-  findByNome(@Param('nome') nome: string): Promise<Plano[]> {
+  findByNome(@Param('nome') nome: string) {
     return this.planoService.findByNome(nome);
   }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() plano: Plano): Promise<Plano> {
-    return this.planoService.create(plano);
+  async create(@Body() plano: Plano) {
+    const data = await this.planoService.create(plano);
+    return {
+      message: 'Plano criado com sucesso!',
+      data
+    };
   }
 
   @Put()
   @HttpCode(HttpStatus.OK)
-  update(@Body() plano: Plano): Promise<Plano> {
-    return this.planoService.update(plano);
+  async update(@Body() plano: Plano) {
+    const data = await this.planoService.update(plano);
+    return {
+      message: 'Plano atualizado com sucesso!',
+      data
+    };
   }
 
   @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseIntPipe) id: number){
-    return this.planoService.delete(id);
+  @HttpCode(HttpStatus.OK)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    await this.planoService.delete(id);
+    return {
+      message: 'Plano deletado com sucesso!'
+    };
   }
-
 }

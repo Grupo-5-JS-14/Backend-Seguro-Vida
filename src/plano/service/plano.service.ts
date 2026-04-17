@@ -1,56 +1,73 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { DeleteResult, ILike, Repository } from "typeorm";
+import { ILike, Repository } from "typeorm";
 import { Plano } from "../entities/plano.entity";
 
 @Injectable()
 export class PlanoService {
-    constructor(
-        @InjectRepository(Plano)
-        private planoRepository: Repository<Plano>
-    ) { }
 
-    async findAll(): Promise<Plano[]> {
-        return await this.planoRepository.find();
-    }
+  constructor(
+    @InjectRepository(Plano)
+    private planoRepository: Repository<Plano>
+  ) {}
 
-    async findById(id: number): Promise<Plano> {
+  async findAll(): Promise<Plano[]> {
 
-        let plano = await this.planoRepository.findOne({
-            where: {
-                id
-            }
-        });
+    const lista = await this.planoRepository.find({
+      relations: { apolices: true }
+    });
 
-        if (!plano)
-            throw new HttpException('Plano não encontrado!', HttpStatus.NOT_FOUND);
+    if (lista.length === 0)
+      throw new NotFoundException('Nenhum plano encontrado!');
 
-        return plano;
-    }
+    return lista;
+  }
 
-    async findByNome(nome: string): Promise<Plano[]> {
-        return await this.planoRepository.find({
-            where: {
-                nome: ILike(`%${nome}%`)
-            }
-        });
-    }
+  async findById(id: number): Promise<Plano> {
 
-    async create(plano: Plano): Promise<Plano> {
-        return await this.planoRepository.save(plano);
-    }
+    const plano = await this.planoRepository.findOne({
+      where: { id },
+      relations: { apolices: true }
+    });
 
-    async update(plano: Plano): Promise<Plano> {
+    if (!plano)
+      throw new NotFoundException('Plano não encontrado!');
 
-        await this.findById(plano.id);
+    return plano;
+  }
 
-        return await this.planoRepository.save(plano);
-    }
+  async findByNome(nome: string): Promise<Plano[]> {
 
-    async delete(id: number): Promise<DeleteResult> {
+    const planos = await this.planoRepository.find({
+      where: {
+        nome: ILike(`%${nome}%`)
+      }
+    });
 
-        await this.findById(id);
+    if (planos.length === 0)
+      throw new NotFoundException('Nenhum plano encontrado com esse nome!');
 
-        return await this.planoRepository.delete(id);
-    }
+    return planos;
+  }
+
+  async create(plano: Plano): Promise<Plano> {
+    return await this.planoRepository.save(plano);
+  }
+
+  async update(plano: Plano): Promise<Plano> {
+
+    await this.findById(plano.id);
+
+    return await this.planoRepository.save(plano);
+  }
+
+  async delete(id: number): Promise<void> {
+
+    await this.findById(id);
+
+    const result = await this.planoRepository.delete(id);
+
+    if (result.affected === 0)
+      throw new NotFoundException('Plano não encontrado!');
+  }
 }
