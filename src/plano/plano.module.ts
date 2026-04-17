@@ -1,9 +1,13 @@
-import { Module } from '@nestjs/common';
-import { PlanoService } from './service/plano.service';
-import { PlanoController } from './controller/plano.controller';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Plano } from "./entities/plano.entity";
+import { PlanoController } from "./controller/plano.controller";
+import { PlanoService } from "./service/plano.service";
 
 @Module({
-  providers: [PlanoService],
-  controllers: [PlanoController]
+    imports: [TypeOrmModule.forFeature([Plano])],
+    providers: [PlanoService],
+    controllers: [PlanoController],
+    exports: [PlanoService]
 })
 export class PlanoModule {}
