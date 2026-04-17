@@ -17,6 +17,13 @@ export class ApoliceController {
     return this.apoliceService.findById(id);
   }
 
+
+  @Get('/status/:status')// pesquisar por nome
+  @HttpCode(HttpStatus.OK)
+  findByStatus(@Param('status') status: string) : Promise<Apolice[]>{ 
+    return this.apoliceService.findByStatus(status);
+  }  
+
   @Post()// criar cadastro
   @HttpCode(HttpStatus.OK)
   create(@Body() apolice: Apolice): Promise<Apolice>{  

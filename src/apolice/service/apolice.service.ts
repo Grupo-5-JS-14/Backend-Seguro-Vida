@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Apolice } from '../entities/apolice.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ApoliceService {
@@ -14,16 +14,25 @@ export class ApoliceService {
     return await this.apoliceRepository.find();
   }
 
+
   async findById(id: number): Promise<Apolice>{
     const apolice = await this.apoliceRepository.findOne({
         where: { id },
-        relations: { usuario:true }
+        relations: { usuario:true, plano:true  }
     });
     if (!apolice) {
     throw new HttpException("Apolice não cadastrada", HttpStatus.NOT_FOUND);
     } 
 
     return apolice;
+  }
+
+  async findByStatus(status: string): Promise<Apolice[]>{
+    return await this.apoliceRepository.find({
+        where: {
+            status: ILike(`%${status}%`)
+        }
+    }); 
   }
 
   async create(apolice: Apolice): Promise<Apolice> {
