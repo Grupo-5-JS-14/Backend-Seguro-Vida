@@ -6,29 +6,29 @@ import { IsEmail, IsNotEmpty, Min, MinLength } from 'class-validator';
 export class Usuario {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({length: 100})
-  nome: string;
+  nome!: string;
 
   @IsEmail()
   @IsNotEmpty()
   @Column({length: 255, nullable: false, unique: true})
-  usuario: string;
+  usuario!: string;
 
   @MinLength(8)
   @IsNotEmpty()
   @Column({length: 255, nullable: false }) 
-  senha: string;
+  senha!: string;
 
   @Column({length: 5000 }) 
-  foto: string;
+  foto!: string;
 
   @Min(0)
   @Column({ nullable: false })
-  idade: number;
+  idade!: number;
 
   // @OneToMany(() => Apolice, (apolice) => apolice.usuario)
-  // apolices: Apolice[];
+  // apolices!: Apolice[];
 
 }
