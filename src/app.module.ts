@@ -16,7 +16,7 @@ import { Apolice } from './apolice/entities/apolice.entity';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'root',
+      password: '1234',
       database: 'db_segurovida',
       entities: [Usuario, Plano, Apolice],
       synchronize: true,
