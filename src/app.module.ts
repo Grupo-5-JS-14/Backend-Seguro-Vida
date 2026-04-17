@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { UsuarioModule } from './usuario/usuario.module';
 import { PlanoModule } from './plano/plano.module';
 import { ApoliceModule } from './apolice/apolice.module';
-import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { Plano } from './plano/entities/plano.entity';
@@ -26,7 +25,6 @@ import { Apolice } from './apolice/entities/apolice.entity';
     UsuarioModule,
     PlanoModule,
     ApoliceModule,
-    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
