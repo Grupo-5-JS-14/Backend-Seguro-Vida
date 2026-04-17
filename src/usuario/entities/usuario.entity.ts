@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import  { Apolice } from '../../apolice/entities/apolice.entity';
+// import  { Apolice } from '../../apolice/entities/apolice.entity';
 import { IsEmail, IsNotEmpty, Min, MinLength } from 'class-validator';
 
 @Entity({name: 'tb_usuarios'})
@@ -13,7 +13,7 @@ export class Usuario {
 
   @IsEmail()
   @IsNotEmpty()
-  @Column({length: 255, nullable: false })
+  @Column({length: 255, nullable: false, unique: true})
   usuario: string;
 
   @MinLength(8)
@@ -28,7 +28,7 @@ export class Usuario {
   @Column({ nullable: false })
   idade: number;
 
-  @OneToMany(() => Apolice, (apolice) => apolice.usuario)
-  apolices: Apolice[];
+  // @OneToMany(() => Apolice, (apolice) => apolice.usuario)
+  // apolices: Apolice[];
 
 }

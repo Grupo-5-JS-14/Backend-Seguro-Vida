@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
-import { Bcrypt } from '../../auth/bcrypt/bcrypt';
+import { Bcrypt } from '../../utils/bcrypt';
 
 @Injectable()
 export class UsuarioService {
@@ -12,7 +12,7 @@ export class UsuarioService {
         private bcrypt: Bcrypt
     ) { }
 
-    async findByUsuario(usuario: string): Promise<Usuario | undefined> {
+    async findByUsuario(usuario: string): Promise<Usuario | null > {
         return await this.usuarioRepository.findOne({
             where: {
                 usuario: usuario
@@ -23,10 +23,9 @@ export class UsuarioService {
     async findAll(): Promise<Usuario[]> {
         return await this.usuarioRepository.find({
           relations:{
-            postagem: true
+          //apolice: true
           }
         });
-
     }
 
     async findById(id: number): Promise<Usuario> {
@@ -36,7 +35,7 @@ export class UsuarioService {
                 id
             },
 			relations:{
-            	postagem: true
+            //	apolice: true
           	}
         });
 
@@ -44,20 +43,26 @@ export class UsuarioService {
             throw new HttpException('Usuario não encontrado!', HttpStatus.NOT_FOUND);
 
         return usuario;
-
     }
 
     async create(usuario: Usuario): Promise<Usuario> {
         
-        const buscaUsuario = await this.findByUsuario(usuario.usuario);
+    const buscaUsuario = await this.findByUsuario(usuario.usuario);
 
-        if (buscaUsuario)
-            throw new HttpException("O Usuario já existe!", HttpStatus.BAD_REQUEST);
-
-        usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha)
-        return await this.usuarioRepository.save(usuario);
-
+    if (buscaUsuario)
+        throw new HttpException("O Usuario já existe!", HttpStatus.BAD_REQUEST);
+    if (usuario.idade < 18) {
+        throw new HttpException(
+            "Não elegível para este tipo de seguro.",
+            HttpStatus.BAD_REQUEST
+        );
     }
+
+    usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+
+    return await this.usuarioRepository.save(usuario);
+}
+
 
     async update(usuario: Usuario): Promise<Usuario> {
 
@@ -70,7 +75,15 @@ export class UsuarioService {
 
         usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha)
         return await this.usuarioRepository.save(usuario);
-
     }
 
-}
+    async delete(id: number): Promise<void> {
+        
+        await this.findById(id);
+
+        const resultado = await this.usuarioRepository.delete(id);
+
+        if (resultado.affected === 0)
+            throw new HttpException('Usuário não encontrado!', HttpStatus.NOT_FOUND);
+        }
+    }
