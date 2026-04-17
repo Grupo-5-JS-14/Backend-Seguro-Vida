@@ -7,12 +7,10 @@ import { UsuarioLogin } from './../entities/usuariologin.entity';
 //@ApiTags('Usuario')
 @Controller("/usuario")
 export class AuthController {
-    //Classe que controla as requisições de autenticação
 
     constructor(private authService: AuthService) { }
 
     @UseGuards(LocalAuthGuard)
-    //valida login
     @HttpCode(HttpStatus.OK)
     @Post('/logar')
     login(@Body() usuario: UsuarioLogin): Promise<any> {
