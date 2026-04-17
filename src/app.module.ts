@@ -7,6 +7,7 @@ import { ApoliceModule } from './apolice/apolice.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
+import { Plano } from './plano/entities/plano.entity';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { Usuario } from './usuario/entities/usuario.entity';
       password: 'root',
       database: 'db_segurovida',
       entities: [Usuario],
+      entities: [Plano], 
       synchronize: true,
     }),
 
