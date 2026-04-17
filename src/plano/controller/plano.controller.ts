@@ -25,7 +25,7 @@ export class PlanoController {
     return this.planoService.findByNome(nome);
   }
 
-  @Post()
+  @Post('/cadastrar')
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() plano: Plano) {
     const data = await this.planoService.create(plano);
@@ -35,7 +35,7 @@ export class PlanoController {
     };
   }
 
-  @Put()
+  @Put('/atualizar')
   @HttpCode(HttpStatus.OK)
   async update(@Body() plano: Plano) {
     const data = await this.planoService.update(plano);
@@ -45,7 +45,7 @@ export class PlanoController {
     };
   }
 
-  @Delete('/:id')
+  @Delete('/deletar/:id')
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id', ParseIntPipe) id: number) {
     await this.planoService.delete(id);

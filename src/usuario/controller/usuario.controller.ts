@@ -7,7 +7,7 @@ export class UsuarioController {
 
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @Get()
+  @Get('/all')
   @HttpCode(HttpStatus.OK)
   findAll() {
     return this.usuarioService.findAll();
@@ -19,7 +19,7 @@ export class UsuarioController {
     return this.usuarioService.findById(id);
   }
 
-  @Post()
+  @Post('/cadastrar')
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() usuario: Usuario) {
     const data = await this.usuarioService.create(usuario);
@@ -29,7 +29,7 @@ export class UsuarioController {
     };
   }
 
-  @Put()
+  @Put('/atualizar')
   @HttpCode(HttpStatus.OK)
   async update(@Body() usuario: Usuario) {
     const data = await this.usuarioService.update(usuario);
@@ -39,7 +39,7 @@ export class UsuarioController {
     };
   }
 
-  @Delete('/:id')
+  @Delete('/deletar/:id')
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id', ParseIntPipe) id: number) {
     await this.usuarioService.delete(id);

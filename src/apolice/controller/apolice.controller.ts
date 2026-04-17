@@ -7,7 +7,7 @@ export class ApoliceController {
 
   constructor(private readonly apoliceService: ApoliceService) {}
 
-  @Get()
+  @Get('/all')
   @HttpCode(HttpStatus.OK)
   findAll() {
     return this.apoliceService.findAll();
@@ -19,7 +19,7 @@ export class ApoliceController {
     return this.apoliceService.findById(id);
   }
 
-  @Post()
+  @Post('/cadastrar')
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() apolice: Apolice) {
     const data = await this.apoliceService.create(apolice);
@@ -29,7 +29,7 @@ export class ApoliceController {
     };
   }
 
-  @Put()
+  @Put('/atualizar')
   @HttpCode(HttpStatus.OK)
   async update(@Body() apolice: Apolice) {
     const data = await this.apoliceService.update(apolice);
@@ -39,7 +39,7 @@ export class ApoliceController {
     };
   }
 
-  @Delete('/:id')
+  @Delete('/deletar/:id')
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id', ParseIntPipe) id: number) {
     await this.apoliceService.delete(id);
