@@ -7,6 +7,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors()
+
+  process.env.TZ = '-03:00';
   
   await app.listen(process.env.PORT ?? 4000);
 }

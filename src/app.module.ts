@@ -8,6 +8,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { Plano } from './plano/entities/plano.entity';
 import { Apolice } from './apolice/entities/apolice.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { Apolice } from './apolice/entities/apolice.entity';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: '1234',
+      password: '159875321',
       database: 'db_segurovida',
       entities: [Usuario, Plano, Apolice],
       synchronize: true,
@@ -24,6 +25,7 @@ import { Apolice } from './apolice/entities/apolice.entity';
 
     UsuarioModule,
     PlanoModule,
+    AuthModule, 
     ApoliceModule,
   ],
   controllers: [AppController],

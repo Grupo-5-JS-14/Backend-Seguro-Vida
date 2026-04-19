@@ -13,21 +13,21 @@ export class PlanoService {
 
   async findAll(): Promise<Plano[]> {
 
-    const lista = await this.planoRepository.find({
-      relations: { apolices: true }
+    const planos = await this.planoRepository.find({
+      relations: { usuario: true }
     });
 
-    if (lista.length === 0)
+    if (planos.length === 0)
       throw new NotFoundException('Nenhum plano encontrado!');
 
-    return lista;
+    return planos;
   }
 
   async findById(id: number): Promise<Plano> {
 
     const plano = await this.planoRepository.findOne({
       where: { id },
-      relations: { apolices: true }
+      relations: { apolice: true, usuario: true }
     });
 
     if (!plano)
@@ -38,16 +38,16 @@ export class PlanoService {
 
   async findByNome(nome: string): Promise<Plano[]> {
 
-    const planos = await this.planoRepository.find({
+    const plano = await this.planoRepository.find({
       where: {
         nome: ILike(`%${nome}%`)
       }
     });
 
-    if (planos.length === 0)
+    if (plano.length === 0)
       throw new NotFoundException('Nenhum plano encontrado com esse nome!');
 
-    return planos;
+    return plano;
   }
 
   async create(plano: Plano): Promise<Plano> {
@@ -57,7 +57,6 @@ export class PlanoService {
   async update(plano: Plano): Promise<Plano> {
 
     await this.findById(plano.id);
-
     return await this.planoRepository.save(plano);
   }
 

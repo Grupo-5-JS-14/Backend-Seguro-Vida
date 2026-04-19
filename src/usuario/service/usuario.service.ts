@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
-import { Bcrypt } from '../../utils/bcrypt';
+import { Bcrypt } from '../../auth/bycript/bycript';
 
 @Injectable()
 export class UsuarioService {
@@ -22,7 +22,7 @@ export class UsuarioService {
   async findAll(): Promise<Usuario[]> {
 
     const lista = await this.usuarioRepository.find({
-      relations: { apolices: true }
+      relations: { apolice: true, plano: true}
     });
 
     if (lista.length === 0)
@@ -35,7 +35,8 @@ export class UsuarioService {
 
     const usuario = await this.usuarioRepository.findOne({
       where: { id },
-      relations: { apolices: true }
+      relations: { apolice: true, plano: true },
+
     });
 
     if (!usuario)
@@ -44,20 +45,20 @@ export class UsuarioService {
     return usuario;
   }
 
-  async create(usuario: Usuario): Promise<Usuario> {
+  async create(email: Usuario): Promise<Usuario> {
 
-    const existe = await this.findByUsuario(usuario.usuario);
+    const existe = await this.findByUsuario(email.usuario);
 
     if (existe)
       throw new BadRequestException('Usuário já cadastrado!');
 
    
-    if (usuario.idade < 18)
+    if (email.idade < 18)
       throw new BadRequestException('Não elegível para este tipo de seguro.');
 
-    usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+    email.senha = await this.bcrypt.criptografarSenha(email.senha);
 
-    return await this.usuarioRepository.save(usuario);
+    return await this.usuarioRepository.save(email);
   }
 
   async update(usuario: Usuario): Promise<Usuario> {

@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Usuario } from "../../usuario/entities/usuario.entity";
 import { Plano } from "../../plano/entities/plano.entity";
 
@@ -10,7 +10,7 @@ export class Apolice {
   id!: number;
 
   @IsNotEmpty()
-  @Column({ type: 'date' })
+  @CreateDateColumn()
   dataContratacao!: Date;
 
   @IsNotEmpty()
@@ -21,12 +21,12 @@ export class Apolice {
   @Column('decimal', { precision: 10, scale: 2 })
   valorFinal!: number;
 
-  @ManyToOne(() => Usuario, (usuario) => usuario.apolices, {
+  @ManyToOne(() => Usuario, (usuario) => usuario.apolice, {
     onDelete: "CASCADE"
   })
   usuario!: Usuario;
 
-  @ManyToOne(() => Plano, (plano) => plano.apolices, {
+  @ManyToOne(() => Plano, (plano) => plano.apolice, {
     onDelete: "CASCADE"
   })
   plano!: Plano;

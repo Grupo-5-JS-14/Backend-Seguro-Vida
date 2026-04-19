@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
 import { IsEmail, IsNotEmpty, Min, MinLength } from 'class-validator';
 import { Apolice } from '../../apolice/entities/apolice.entity';
+import { Plano } from '../../plano/entities/plano.entity';
 
 @Entity({ name: 'tb_usuarios' })
 export class Usuario {
@@ -25,10 +26,17 @@ export class Usuario {
   @Column({ length: 5000, nullable: true })
   foto!: string;
 
-  @Min(0)
   @Column({ nullable: false })
   idade!: number;
+  
+  @CreateDateColumn()
+  dataCadastro!: Date;
+
 
   @OneToMany(() => Apolice, (apolice) => apolice.usuario)
-  apolices!: Apolice[];
+  apolice!: Apolice[]
+
+  @OneToMany(() => Plano, (plano) => plano.usuario)
+  plano!: Plano[]
+
 }

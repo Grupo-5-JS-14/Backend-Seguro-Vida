@@ -2,20 +2,20 @@ import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs
 import { LocalAuthGuard } from '../guard/local-auth.guard';
 import { AuthService } from '../services/auth.service';
 import { UsuarioLogin } from './../entities/usuariologin.entity';
-import { ApiTags } from '@nestjs/swagger';
 
-//@ApiTags('Usuario')
-@Controller("/usuario")
+@Controller("/usuarios")
 export class AuthController {
-    Classe que controla as requisições de autenticação
-
     constructor(private authService: AuthService) { }
 
     @UseGuards(LocalAuthGuard)
-    //valida login
     @HttpCode(HttpStatus.OK)
     @Post('/logar')
-    login(@Body() usuario: UsuarioLogin): Promise<any> {
-        return this.authService.login(usuario);
+    async login(@Body() usuario: UsuarioLogin): Promise<any> {
+    
+     const info = await this.authService.login(usuario);
+        return {
+         message: 'Acesso permitido!',
+         usuario: info.usuario, foto: info.foto, acesso: info.token 
+        };
     }
 }

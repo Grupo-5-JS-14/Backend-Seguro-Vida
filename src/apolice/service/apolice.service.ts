@@ -14,7 +14,6 @@ export class ApoliceService {
   async findAll(): Promise<Apolice[]> {
 
     const lista = await this.apoliceRepository.find({
-      relations: { usuario: true, plano: true }
     });
 
     if (lista.length === 0)

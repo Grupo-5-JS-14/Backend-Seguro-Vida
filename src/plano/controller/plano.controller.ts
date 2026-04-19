@@ -1,13 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { Plano } from "../entities/plano.entity";
 import { PlanoService } from "../service/plano.service";
+import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 
+@UseGuards(JwtAuthGuard) 
 @Controller("/planos")
 export class PlanoController {
 
   constructor(private readonly planoService: PlanoService) {}
 
-  @Get()
+  @Get('/todos')
   @HttpCode(HttpStatus.OK)
   findAll() {
     return this.planoService.findAll();
@@ -25,23 +27,24 @@ export class PlanoController {
     return this.planoService.findByNome(nome);
   }
 
+
   @Post('/cadastrar')
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() plano: Plano) {
-    const data = await this.planoService.create(plano);
+    const info = await this.planoService.create(plano);
     return {
       message: 'Plano criado com sucesso!',
-      data
+      info
     };
   }
 
-  @Put('/atualizar')
+  @Put('/atualizar')   
   @HttpCode(HttpStatus.OK)
   async update(@Body() plano: Plano) {
-    const data = await this.planoService.update(plano);
+    const info = await this.planoService.update(plano);
     return {
       message: 'Plano atualizado com sucesso!',
-      data
+      info
     };
   }
 
