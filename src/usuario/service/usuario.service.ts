@@ -63,18 +63,22 @@ export class UsuarioService {
 
   async update(usuario: Usuario): Promise<Usuario> {
 
-    await this.findById(usuario.id);
+    if (!usuario.id) {
+    throw new BadRequestException('ID é obrigatório para atualização! Exemplo "id:x".');
+  }
 
-    const existe = await this.findByUsuario(usuario.usuario);
+  await this.findById(usuario.id);
 
-    if (existe && existe.id !== usuario.id)
-      throw new BadRequestException('E-mail já cadastrado!');
+  const existe = await this.findByUsuario(usuario.usuario);
 
-    if (usuario.senha) {
-      usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
-    }
+  if (existe && existe.id !== usuario.id)
+    throw new BadRequestException('E-mail já cadastrado!');
 
-    return await this.usuarioRepository.save(usuario);
+  if (usuario.senha) {
+    usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+  }
+
+  return await this.usuarioRepository.save(usuario);
   }
 
   async delete(id: number): Promise<void> {

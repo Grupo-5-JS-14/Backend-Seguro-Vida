@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
-import { IsEmail, IsNotEmpty, Min, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, min, Min, MinLength } from 'class-validator';
 import { Apolice } from '../../apolice/entities/apolice.entity';
 import { Plano } from '../../plano/entities/plano.entity';
 import { ApiProperty } from '@nestjs/swagger';
@@ -30,7 +30,8 @@ export class Usuario {
   @Column({ length: 5000, nullable: true })
   @ApiProperty()
   foto!: string;
-
+  
+  @Min(18,{message:'Idade precisa ser maior que 18 anos.'})
   @Column({ nullable: false })
   @ApiProperty({example:"Digite sua idade."})
   idade!: number;
