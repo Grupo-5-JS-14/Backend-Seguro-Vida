@@ -12,12 +12,13 @@ export class Usuario {
 
   @IsNotEmpty({message: 'Nome nao pode ficar vazio.'})
   @Column({ length: 100 })
-  @ApiProperty({example:"seuemail@email.com"})
+  @ApiProperty({example:"Digite seu nome"})
   nome!: string;
 
   @IsEmail({},{message:'Email precisa ser valido.'})
   @IsNotEmpty({message:'Email do Usuario precisa ser prenchido.'})
   @Column({ length: 255, nullable: false, unique: true })
+  @ApiProperty({example:"Digite seu Usuario com um email."})
   usuario!: string;
 
   @MinLength(8,{message:'Senha precisa esta com 8 digitos.'})
