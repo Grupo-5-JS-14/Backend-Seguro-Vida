@@ -45,20 +45,20 @@ export class UsuarioService {
     return usuario;
   }
 
-  async create(email: Usuario): Promise<Usuario> {
+  async create(usuario: Usuario): Promise<Usuario> {
 
-    const existe = await this.findByUsuario(email.usuario);
+    const existe = await this.findByUsuario(usuario.usuario);
 
     if (existe)
       throw new BadRequestException('Usuário já cadastrado!');
 
    
-    if (email.idade < 18)
+    if (usuario.idade < 18)
       throw new BadRequestException('Não elegível para este tipo de seguro.');
 
-    email.senha = await this.bcrypt.criptografarSenha(email.senha);
+    usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
 
-    return await this.usuarioRepository.save(email);
+    return await this.usuarioRepository.save(usuario);
   }
 
   async update(usuario: Usuario): Promise<Usuario> {
