@@ -2,14 +2,18 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPip
 import { Apolice } from '../entities/apolice.entity';
 import { ApoliceService } from '../service/apolice.service';
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+
+@ApiTags('Apolice')
 @UseGuards(JwtAuthGuard)   
 @Controller('apolices')
+@ApiBearerAuth()
 export class ApoliceController {
 
   constructor(private readonly apoliceService: ApoliceService) {}
 
-  @Get('/todos')
+  @Get('/all')
   @HttpCode(HttpStatus.OK)
   findAll() {
     return this.apoliceService.findAll();

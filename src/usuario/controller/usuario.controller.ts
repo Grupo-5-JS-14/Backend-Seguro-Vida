@@ -2,14 +2,18 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPip
 import { UsuarioService } from "../service/usuario.service";
 import { Usuario } from "../entities/usuario.entity";
 import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+
+@ApiTags('Usuarios')
 @Controller("/usuarios")
+@ApiBearerAuth()
 export class UsuarioController {
 
   constructor(private readonly usuarioService: UsuarioService) {}
 
-  @Get('/todos')
-  @UseGuards(JwtAuthGuard)   
+  @UseGuards(JwtAuthGuard)
+  @Get('/all')
   @HttpCode(HttpStatus.OK)
   async findAll() { 
     const user = await this.usuarioService.findAll();
@@ -23,8 +27,8 @@ export class UsuarioController {
     }))
   }
 
-  @Get('/:id')
   @UseGuards(JwtAuthGuard)
+  @Get('/:id')
   @HttpCode(HttpStatus.OK)
   async findById(@Param('id', ParseIntPipe) id: number) {
     const user =  this.usuarioService.findById(id);
@@ -54,19 +58,24 @@ export class UsuarioController {
     };
   }
   
-  @Put('/atualizar')
   @UseGuards(JwtAuthGuard)
+  @Put('/atualizar')
   @HttpCode(HttpStatus.OK)
   async update(@Body() usuario: Usuario) {
     const info = await this.usuarioService.update(usuario);
     return {
       message: 'Usuário atualizado com sucesso!',
-      info
+      id: info.id, 
+      nome: info.nome, 
+      idade: info.idade,
+      email: info.usuario, 
+      foto: info.foto, 
+      data: info.dataCadastro
     };
   }
   
-  @Delete('/deletar/:id')
   @UseGuards(JwtAuthGuard)
+  @Delete('/deletar/:id')
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id', ParseIntPipe) id: number) {
     await this.usuarioService.delete(id);

@@ -2,14 +2,18 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPip
 import { Plano } from "../entities/plano.entity";
 import { PlanoService } from "../service/plano.service";
 import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+
+@ApiTags('Planos')
 @UseGuards(JwtAuthGuard) 
 @Controller("/planos")
+@ApiBearerAuth()
 export class PlanoController {
 
   constructor(private readonly planoService: PlanoService) {}
 
-  @Get('/todos')
+  @Get('/all')
   @HttpCode(HttpStatus.OK)
   findAll() {
     return this.planoService.findAll();
