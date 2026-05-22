@@ -18,8 +18,8 @@ export class Apolice {
 
   @ApiProperty()
   @IsNotEmpty()
-  @Column({ length: 255 })
-  status!: string;
+  @Column()
+  status!: boolean;
 
   @ApiProperty()
   @IsNotEmpty()
