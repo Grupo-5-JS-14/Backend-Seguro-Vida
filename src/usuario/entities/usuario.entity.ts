@@ -4,7 +4,7 @@ import { Apolice } from '../../apolice/entities/apolice.entity';
 import { Plano } from '../../plano/entities/plano.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity({ name: 'tb_usuarios' })
+@Entity({ name: 'tb_usuariosVitta' })
 export class Usuario {
 
   @PrimaryGeneratedColumn()
@@ -31,7 +31,6 @@ export class Usuario {
   @ApiProperty()
   foto!: string;
   
-  @Min(18,{message:'Idade precisa ser maior que 18 anos.'})
   @Column({ nullable: false })
   @ApiProperty({example:"Digite sua idade."})
   idade!: number;

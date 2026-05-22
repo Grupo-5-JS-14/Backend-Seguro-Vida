@@ -67,7 +67,7 @@ export class ApoliceService {
       );
     }
     // Status 
-    apolice.status = 'ATIVA';
+    apolice.status = true;
     // Calcula 
     apolice.valorFinal =
       this.calcularValor(apolice);

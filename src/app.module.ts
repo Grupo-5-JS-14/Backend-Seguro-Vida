@@ -8,12 +8,13 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProdService } from './data/services/prod.services';
 import { AdminModule } from './admin/admin.module';
+import { DevService } from './data/services/dev.services';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
-      useClass: ProdService,
+      useClass: DevService,
       imports: [ConfigModule]
     }),
     UsuarioModule,
