@@ -19,6 +19,6 @@ import { Bcrypt } from "./bycript/bycript";
     ],
     controllers: [AuthController], 
     providers: [Bcrypt, AuthService, LocalStrategy, JwtStrategy],
-    exports: [Bcrypt], 
+    exports: [Bcrypt, JwtModule],  // exporta JwtModule para uso no AdminModule
 })
 export class AuthModule {};

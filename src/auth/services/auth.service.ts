@@ -25,34 +25,54 @@ export class AuthService {
             throw new HttpException('Usuário ou senha não encontrados!', HttpStatus.NOT_FOUND)
 
         if (buscaUsuario && matchPassword) {
-
             const { senha, ...resposta } = buscaUsuario
-            //Pegue o buscaUsuario, tire a senha, e coloque o resto (...) em resposta
             return resposta
         }
         return null
     }
 
     async login(usuarioLogin: UsuarioLogin) {
-
-        const payload = { sub: usuarioLogin.usuario }
-
         const buscaUsuario = await this.usuarioService.findByUsuario(usuarioLogin.usuario)
 
         if (!buscaUsuario) {
             throw new UnauthorizedException('Usuário não encontrado');
-
         }
+
+        // Inclui o role no payload do JWT
+        const payload = { sub: buscaUsuario.usuario, role: buscaUsuario.role }
 
         return {
             id: buscaUsuario?.id,
             nome: buscaUsuario?.nome,
-            usuario: usuarioLogin.usuario,
+            usuario: buscaUsuario.usuario,
             senha: '',
             foto: buscaUsuario?.foto,
+            role: buscaUsuario.role,
             token: `Bearer ${this.jwtService.sign(payload)}`,
-            //Transforma o payload em um token JWT e coloca ele no formato Bearer (prefixo padrão)
+        }
+    }
 
+    async loginAdmin(usuarioLogin: UsuarioLogin) {
+        const buscaUsuario = await this.usuarioService.findByUsuario(usuarioLogin.usuario)
+
+        if (!buscaUsuario) {
+            throw new UnauthorizedException('Usuário não encontrado');
+        }
+
+        if (buscaUsuario.role !== 'admin') {
+            throw new HttpException('Acesso negado. Apenas administradores podem usar esta rota.', HttpStatus.FORBIDDEN);
+        }
+
+        const payload = { sub: buscaUsuario.usuario, role: buscaUsuario.role }
+
+        return {
+            id: buscaUsuario.id,
+            nome: buscaUsuario.nome,
+            usuario: buscaUsuario.usuario,
+            senha: '',
+            foto: buscaUsuario.foto,
+            role: buscaUsuario.role,
+            token: `Bearer ${this.jwtService.sign(payload)}`,
         }
     }
 }

@@ -35,10 +35,13 @@ export class Usuario {
   @Column({ nullable: false })
   @ApiProperty({example:"Digite sua idade."})
   idade!: number;
+
+  @Column({ length: 20, nullable: false, default: 'user' })
+  @ApiProperty({ example: 'user', description: "Papel do usuário: 'user' ou 'admin'" })
+  role!: string;
   
   @CreateDateColumn()
   dataCadastro!: Date;
-
 
   @OneToMany(() => Apolice, (apolice) => apolice.usuario)
   apolice!: Apolice[]

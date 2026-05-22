@@ -1,5 +1,5 @@
 import { IsNotEmpty } from "class-validator";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Apolice } from "../../apolice/entities/apolice.entity";
 import { Usuario } from "../../usuario/entities/usuario.entity";
 import { ApiProperty } from "@nestjs/swagger";
@@ -31,8 +31,8 @@ export class Plano {
   })
   usuario!: Usuario;
 
-  @ManyToOne(() => Apolice, (apolice) => apolice.plano, {
+  @OneToMany(() => Apolice, (apolice) => apolice.plano, {
     onDelete: "CASCADE"
   })
-  apolice!: Apolice;
+  apolice!: Apolice[];
 }
