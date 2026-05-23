@@ -1,6 +1,6 @@
 import {
   Body, Controller, Delete, Get, HttpCode, HttpStatus,
-  Param, ParseIntPipe, Put, UseGuards
+  Param, ParseIntPipe, Post, Put, UseGuards
 } from '@nestjs/common';
 import { AdminAuthGuard } from '../../auth/guard/admin-auth.guard';
 import { ApoliceService } from '../../apolice/service/apolice.service';
@@ -57,6 +57,17 @@ export class AdminController {
   }
 
   // ─── PLANOS ─────────────────────────────────────────────────────────────────
+
+  @Post('/planos/cadastrar')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: '[ADMIN] Cadastra um novo plano' })
+  async createPlano(@Body() plano: Plano) {
+    const novoPlano = await this.planoService.create(plano);
+    return {
+      message: 'Plano cadastrado com sucesso!',
+      plano: novoPlano
+    };
+  }
 
   @Get('/planos')
   @HttpCode(HttpStatus.OK)
