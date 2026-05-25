@@ -12,17 +12,14 @@ export class Apolice {
   id!: number;
 
   @ApiProperty()
-  @IsNotEmpty()
   @CreateDateColumn()
   dataContratacao!: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
   @Column()
   status!: boolean;
 
   @ApiProperty()
-  @IsNotEmpty()
   @Column('decimal', { precision: 10, scale: 2 })
   valorFinal!: number;
 
