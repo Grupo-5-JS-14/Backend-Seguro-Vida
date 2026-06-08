@@ -15,10 +15,10 @@ export class DevService implements TypeOrmOptionsFactory{
             host: 'localhost',
             port: 3306,
             username: 'root',
-            password: '1234',
+            password: '110294',
             database: 'db_segurovida',
             entities: [Usuario, Apolice, Plano],
-            synchronize: true,
+            synchronize: false,
         };
     }
 }

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
 import { Bcrypt } from '../../auth/bycript/bycript';
+import { CloudinaryService } from '../../cloudinary/cloudinary.service';
 
 @Injectable()
 export class UsuarioService {
@@ -10,7 +11,8 @@ export class UsuarioService {
   constructor(
     @InjectRepository(Usuario)
     private usuarioRepository: Repository<Usuario>,
-    private bcrypt: Bcrypt
+    private bcrypt: Bcrypt,
+    private cloudinaryService: CloudinaryService,
   ) {}
 
   async findByUsuario(usuario: string): Promise<Usuario | null> {
@@ -61,6 +63,26 @@ export class UsuarioService {
     return await this.usuarioRepository.save(usuario);
   }
 
+  async createComFoto(usuario: Usuario, foto: Express.Multer.File,): Promise<Usuario>{
+    const existe = await this.findByUsuario(usuario.usuario);
+
+    if(existe)
+      throw new BadRequestException("Usuario ja cadastrado pai.")
+
+    if(usuario.idade < 18)
+      throw new BadRequestException("Novinho demais")
+
+    if (foto){
+      const upload = await this.cloudinaryService.uploadImage(foto);
+      usuario.foto = upload.url
+      usuario.fotoPublicId = upload.publicId
+    }
+    
+
+    usuario.senha = await this.bcrypt.criptografarSenha(usuario.senha);
+    return await this.usuarioRepository.save(usuario)
+  }
+
   async update(usuario: Usuario): Promise<Usuario> {
 
     if (!usuario.id) {
@@ -79,6 +101,21 @@ export class UsuarioService {
   }
 
   return await this.usuarioRepository.save(usuario);
+  }
+
+  async updateFoto(id: number, foto:Express.Multer.File): Promise<Usuario>{
+    const usuario = await this.findById(id);
+
+    if(usuario.fotoPublicId){
+      await this.cloudinaryService.deleteImage(usuario.fotoPublicId);
+    }
+
+    const upload = await this.cloudinaryService.uploadImage(foto)
+
+    usuario.foto = upload.url;
+    usuario.fotoPublicId = upload.publicId;
+
+    return await this.usuarioRepository.save(usuario)
   }
 
   async delete(id: number): Promise<void> {

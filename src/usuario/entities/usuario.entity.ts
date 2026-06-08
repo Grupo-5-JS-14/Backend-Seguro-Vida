@@ -30,6 +30,9 @@ export class Usuario {
   @Column({ length: 5000, nullable: true })
   @ApiProperty()
   foto!: string;
+
+  @Column({length: 5000, nullable: true})
+  fotoPublicId!:string
   
   @Column({ nullable: false })
   @ApiProperty({example:"Digite sua idade."})
