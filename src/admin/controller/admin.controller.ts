@@ -23,7 +23,7 @@ export class AdminController {
     private readonly usuarioService: UsuarioService,
   ) {}
 
-  // ─── APÓLICES ───────────────────────────────────────────────────────────────
+  // APÓLICES 
 
   @Get('/apolices')
   @HttpCode(HttpStatus.OK)
@@ -56,7 +56,7 @@ export class AdminController {
     return { message: 'Apólice deletada com sucesso!' };
   }
 
-  // ─── PLANOS ─────────────────────────────────────────────────────────────────
+  // PLANOS 
 
   @Post('/planos/cadastrar')
   @HttpCode(HttpStatus.CREATED)
@@ -99,7 +99,7 @@ export class AdminController {
     return { message: 'Plano deletado com sucesso!' };
   }
 
-  // ─── USUÁRIOS ───────────────────────────────────────────────────────────────
+  //  USUÁRIOS 
 
   @Get('/usuarios')
   @HttpCode(HttpStatus.OK)
