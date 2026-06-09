@@ -22,7 +22,8 @@ export class UsuarioController {
 
     return {
       message: "Foto enviada para o cloud com sucesso!",
-      foto: urlFoto,
+      foto: urlFoto.url,
+      publicId: urlFoto.publicId
     };
   }
 
